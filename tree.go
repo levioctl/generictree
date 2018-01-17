@@ -1,26 +1,34 @@
 package treelib
 
 type Tree struct {
-	root    *Node
-	rootNid string
+	root  *Node
+	nodes map[string](*Node)
 }
 
 type Node struct {
 	value     int
+	nid       string
 	parentNid string
 }
 
-func (tree *Tree) AddNode(value int, parent string) {
+func (tree *Tree) CreateNode(value int, nid string, parentNid string) *Node {
 	node := new(Node)
+	if tree.root == nil {
+		tree.root = node
+	}
+	node.nid = nid
 	node.value = value
-	tree.root = node
+	node.parentNid = parentNid
+	tree.nodes[nid] = node
+	return node
 }
 
 func (tree *Tree) GetNode(nid string) *Node {
-	return tree.root
+	return tree.nodes[nid]
 }
 
 func NewTree() *Tree {
 	tree := new(Tree)
+	tree.nodes = make(map[string]*Node)
 	return tree
 }
