@@ -48,3 +48,17 @@ func Test_ParentNid(t *testing.T) {
 	childNode := tree.CreateNode(50, "child", tree.root.nid)
 	assert.Equal(t, childNode.parentNid, "root", "Parent NID of child is not 'root'")
 }
+
+func Test_Children(t *testing.T) {
+	tree := NewTree()
+	tree.CreateNode(30, "root", "")
+	tree.CreateNode(100, "child1", tree.root.nid)
+	tree.CreateNode(200, "child2", tree.root.nid)
+	tree.CreateNode(110, "child1-of-child1", "child1")
+
+	childrenOfRoot := tree.GetNode("root").children
+	assert.Equal(t, childrenOfRoot[0].value, 100)
+	assert.Equal(t, childrenOfRoot[1].value, 200)
+	childrenOfChild1 := tree.GetNode("child1").children
+	assert.Equal(t, childrenOfChild1[0].value, 110)
+}
