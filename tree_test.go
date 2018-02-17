@@ -8,7 +8,7 @@ import (
 
 func Test_CreateRoot(t *testing.T) {
 	tree := NewTree()
-	rootNode := tree.CreateNode(30, "root", "")
+	var rootNode *Node = tree.CreateNode(30, "root", "")
 	assert.Equal(t, rootNode.value, 30, "Root node should have a value of 30")
 }
 
@@ -61,4 +61,33 @@ func Test_Children(t *testing.T) {
 	assert.Equal(t, childrenOfRoot[1].value, 200)
 	childrenOfChild1 := tree.GetNode("child1").children
 	assert.Equal(t, childrenOfChild1[0].value, 110)
+}
+
+
+// Does not work yet
+func _Test_String(t *testing.T) {
+	tree := NewTree()
+	tree.CreateNode(100, "root", "")
+	tree.CreateNode(110, "first", "root")
+	tree.CreateNode(120, "second", "root")
+	tree.CreateNode(130, "third", "root")
+	tree.CreateNode(111, "firstfirst", "first")
+	tree.CreateNode(112, "firstsecond", "first")
+	tree.CreateNode(121, "secondfirst", "second")
+	tree.CreateNode(131, "thirdfirst", "third")
+	tree.CreateNode(131, "thirdsecond", "third")
+	tree.CreateNode(131, "thirdthird", "third")
+
+	expected := `100
+├── 110
+│   ├── 111
+│   └── 112
+├── 120
+│   └── 120
+└─── 130
+    ├── 131
+    ├── 132
+    └── 133
+`
+	assert.Equal(t, expected, tree.String())
 }

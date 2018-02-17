@@ -1,18 +1,24 @@
 package treelib
 
+import (
+	"github.com/oleiade/lane"
+	// "github.com/rogpeppe/godef/go/ast"
+	"fmt"
+)
+
 type Tree struct {
 	root  *Node
 	nodes map[string](*Node)
 }
 
 type Node struct {
-	value     int
+	value     interface{}
 	nid       string
 	parentNid string
 	children  [](*Node)
 }
 
-func (tree *Tree) CreateNode(value int, nid string, parentNid string) *Node {
+func (tree *Tree) CreateNode(value interface{}, nid string, parentNid string) *Node {
 	node := new(Node)
 	if tree.root == nil {
 		tree.root = node
@@ -30,6 +36,21 @@ func (tree *Tree) CreateNode(value int, nid string, parentNid string) *Node {
 
 func (tree *Tree) GetNode(nid string) *Node {
 	return tree.nodes[nid]
+}
+
+func (tree *Tree) String() string {
+	if tree.root == nil {
+		return ""
+	}
+
+	nodesToPrint := lane.NewQueue()
+	nodesToPrint.Enqueue(tree.root)
+	var result string = ""
+	for !nodesToPrint.Empty() {
+		var currentNode *Node = nodesToPrint.Dequeue().(*Node)
+		result += fmt.Sprintf("%v", currentNode.value)
+	}
+	return result
 }
 
 func NewTree() *Tree {
